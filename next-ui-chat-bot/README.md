@@ -11,6 +11,7 @@ yarn dev
 # or
 pnpm dev
 ```
+![interface.png](https://github.com/vultureprime/ai-web-interface/blob/main/next-ui-chat-bot/public/img/Screen%20Shot%202566-09-18%20at%2019.25.34.png)
 ## Setting Endpoint
 
 ```
