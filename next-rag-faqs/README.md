@@ -25,7 +25,7 @@ pnpm dev
 bun dev
 ```
 
-![interface.png](/image/interface.png)
+![interface.png](https://github.com/vultureprime/ai-web-interface/blob/main/next-rag-faqs/image/interface.png)
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
