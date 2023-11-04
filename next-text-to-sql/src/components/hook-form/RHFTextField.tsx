@@ -35,7 +35,11 @@ const RHFTextField = ({
               className
             )}
           />
-          {(!!error || helperText) && <div>{error?.message || helperText}</div>}
+          {(!!error || helperText) && (
+            <div className={twMerge(error?.message && 'text-rose-500 text-sm')}>
+              {error?.message || helperText}
+            </div>
+          )}
         </div>
       )}
     />

@@ -6,6 +6,7 @@ interface Message {
   role: 'user' | 'ai'
   message: string
   id: string
+  sql?: string
 }
 
 interface ChatWindowProps {
@@ -55,10 +56,16 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                 />
               </div>
               <div className='w-full'>
-                <div className='flex justify-between mb-4 w-full'>
-                  <p className='font-bold'>Ai</p>
-                  <CopyClipboard content={item.message} />
-                </div>
+                <p className='font-bold'>Ai</p>
+                {item?.sql && (
+                  <div className='bg-gray-100 rounded-md my-4 p-4'>
+                    <div className='flex justify-between mb-1 w-full '>
+                      <div />
+                      <CopyClipboard content={item.message} />
+                    </div>
+                    <code>{item.sql}</code>
+                  </div>
+                )}
                 <p>{item.message}</p>
               </div>
             </div>

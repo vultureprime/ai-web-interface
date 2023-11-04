@@ -26,7 +26,7 @@ export function DataGrid<T extends DataRow>({
 }: DataGridProps<T>) {
   return (
     <div>
-      <h2 className='mb-4 text-center text-2xl font-bold text-pink-500'>
+      <h2 className='mb-4 text-center text-2xl font-bold text-blue-500'>
         {title}
       </h2>
       <div className='relative overflow-x-auto'>

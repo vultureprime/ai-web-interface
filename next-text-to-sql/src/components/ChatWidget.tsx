@@ -9,6 +9,7 @@ export interface ChatProps {
   role: Role
   message: string
   id: string
+  sql?: string
 }
 
 export default function ChatWidget({ answer }: { answer: ChatProps[] }) {
