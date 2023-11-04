@@ -211,7 +211,7 @@ export default function Home() {
               state === TabState.tableState && 'hidden xl:block '
             )}
           >
-            <div className='mt-5 mx-auto flex justify-center flex-col items-center bg-white border border-gray-50 w-full xl:w-fit p-8 rounded-3xl'>
+            <div className='mt-5 mx-auto flex justify-center flex-col items-center bg-white border border-gray-50 w-full xl:w-[540px] p-8 rounded-3xl'>
               <div className='flex justify-between items-end w-full gap-x-8 mb-5'>
                 {isEdit ? (
                   <RHFTextField

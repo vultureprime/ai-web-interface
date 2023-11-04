@@ -21,10 +21,7 @@ import { z } from 'zod'
 const inter = Inter({ subsets: ['latin'] })
 
 export const endpointScheme = z.object({
-  endpoint: z.string({
-    required_error: 'Invalid endpoint',
-    invalid_type_error: 'Invalid endpoint',
-  }),
+  endpoint: z.string().url().optional().or(z.literal('')),
 })
 
 export const collectionScheme = z.object({
