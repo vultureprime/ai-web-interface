@@ -18,10 +18,7 @@ axios.defaults.baseURL = endpointAPi
 
 export const askScheme = z.object({
   endpoint: z.string().url().optional().or(z.literal('')),
-  query: z.string({
-    required_error: '',
-    invalid_type_error: '',
-  }),
+  query: z.string(),
   bot: z.string({}).optional(),
 })
 
@@ -36,7 +33,7 @@ export default function Home() {
   const [isEdit, setIsEdit] = useState(false)
   const [state, setState] = useState<TabState>(TabState.tableState)
   const [
-    { isLoading, data, refetch },
+    { isLoading, data: column, refetch: refetchColum },
     { isLoading: isLoadAlldata, data: allData, refetch: refetchAllData },
   ] = useQueries({
     queries: [
@@ -113,7 +110,7 @@ export default function Home() {
   }
   const onRandomData = async () => {
     await randomData()
-    refetch()
+    refetchColum()
     refetchAllData()
   }
   const onSubmit = async (data: IOpenAIForm) => {
@@ -130,14 +127,14 @@ export default function Home() {
   }
 
   const columns = useMemo(() => {
-    if (typeof data?.attr === 'undefined') {
+    if (typeof column?.attr === 'undefined') {
       return []
     }
-    return Object.keys(data.attr).map((x) => ({
+    return Object.keys(column.attr).map((x) => ({
       field: x,
-      headerName: `${data.attr[x].name} (${data.attr[x].type})`,
+      headerName: `${column.attr[x].name} (${column.attr[x].type})`,
     }))
-  }, [data?.attr])
+  }, [column])
 
   const gridData = useMemo(() => {
     if (typeof allData === 'undefined') {
@@ -199,7 +196,7 @@ export default function Home() {
                   </button>
                 </div>
                 <DataGrid
-                  title={data?.table_name}
+                  title={column?.table_name}
                   columns={columns}
                   rows={gridData}
                 ></DataGrid>
@@ -211,10 +208,10 @@ export default function Home() {
             methods={methods}
             onSubmit={handleSubmit(onSubmit)}
             className={twMerge(
-              state === TabState.tableState && 'hidden xl:block'
+              state === TabState.tableState && 'hidden xl:block '
             )}
           >
-            <div className='mt-5 flex justify-center flex-col items-center bg-white border border-gray-50 w-full xl:w-fit p-8 rounded-3xl'>
+            <div className='mt-5 mx-auto flex justify-center flex-col items-center bg-white border border-gray-50 w-full xl:w-fit p-8 rounded-3xl'>
               <div className='flex justify-between items-end w-full gap-x-8 mb-5'>
                 {isEdit ? (
                   <RHFTextField
