@@ -8,7 +8,7 @@ RAG (Retrieval Augmented Generation) is an intelligent system that provides inst
 ## Installation
 
 ```
-https://github.com/vultureprime/next-openai-langchain-basic-RAG.git
+https://github.com/vultureprime/ai-web-interface.git
 ```
 
 ## Getting Started
