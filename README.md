@@ -10,7 +10,7 @@
 
 [AI Chatbot](https://github.com/vultureprime/ai-web-interface/tree/main/next-ui-chat-bot)
 
-
+[Text to SQL](https://github.com/vultureprime/ai-web-interface/tree/main/next-text-to-sql)
 ## License
 
 MIT
