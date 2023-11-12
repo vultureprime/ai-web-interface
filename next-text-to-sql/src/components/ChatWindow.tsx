@@ -1,4 +1,4 @@
-import { LegacyRef } from 'react'
+import { useEffect } from 'react'
 import Image from 'next/image'
 import { CopyClipboard } from '@/components/CopyClipboard'
 
@@ -13,7 +13,7 @@ interface ChatWindowProps {
   messages: Message[]
   isLoading?: boolean
   error?: string
-  chatWindowRef: LegacyRef<HTMLDivElement> | null
+  chatWindowRef: any | null
 }
 
 export const ChatWindow: React.FC<ChatWindowProps> = ({
@@ -22,6 +22,12 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   error,
   chatWindowRef,
 }) => {
+  useEffect(() => {
+    if (chatWindowRef !== null && chatWindowRef?.current) {
+      chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight
+    }
+  }, [messages])
+
   return (
     <div
       ref={chatWindowRef}

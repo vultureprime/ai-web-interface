@@ -36,16 +36,16 @@ const SelectedFile: React.FC<SelectedFileProps> = ({
         htmlFor='fileInput'
         className={isLoading ? 'cursor-none' : 'cursor-pointer'}
       >
-        <div className='bg-white border border-blue-300 rounded-xl p-4 px-12 shadow-md'>
+        <div className='bg-white border px-12  border-blue-300 rounded-xl p-4 shadow-md'>
           {!isLoading ? (
             <Icon
               icon='ep:upload-filled'
               className='text-blue-500 mx-auto'
-              width={240}
+              width={200}
             />
           ) : (
             <video
-              className='w-[240px] h-[240px] mx-auto'
+              className='w-[200px] h-[200px] mx-auto'
               playsInline
               loop
               muted
@@ -65,7 +65,9 @@ const SelectedFile: React.FC<SelectedFileProps> = ({
         onChange={handleInputChange}
       />
       {selectedFile && (
-        <p className='mt-2 text-gray-600'>Selected file: {selectedFile.name}</p>
+        <p className='mt-2 text-gray-600 max-w-[200px] truncate'>
+          Selected file: {selectedFile.name}
+        </p>
       )}
     </div>
   )

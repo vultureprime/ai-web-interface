@@ -14,10 +14,10 @@ const ChatInput: FC<ChatInputProps> = ({
   onSubmit,
 }) => {
   return (
-    <div className='border-t border-gray-300 p-4 flex items-center justify-center bg-white py-8'>
+    <div className='border-t border-gray-300  p-4 flex items-center justify-center bg-white py-8'>
       <form
         onSubmit={onSubmit}
-        className='flex items-center justify-center bg-white max-w-screen-md w-[calc(100%-64px)] px-8 py-4 rounded-full shadow-md'
+        className='flex items-center w-full justify-center bg-white max-w-screen-md w-[calc(100%-64px)] px-8 py-4 rounded-full shadow-md'
       >
         <input
           type='text'

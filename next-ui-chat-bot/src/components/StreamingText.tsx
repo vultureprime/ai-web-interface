@@ -14,6 +14,7 @@ const StreamingText: React.FC<Props> = ({
   chatWindowRef,
 }) => {
   const [displayedText, setDisplayedText] = useState('')
+
   useEffect(() => {
     if (chatWindowRef.current && isTextStream) {
       chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight
