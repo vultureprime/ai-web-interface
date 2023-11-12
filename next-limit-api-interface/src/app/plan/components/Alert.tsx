@@ -128,7 +128,7 @@ export default function Alert({
                           )}
                         </form>
                       ) : (
-                        <div className='flex gap-x-2'>
+                        <div className='flex gap-x-2 my-8'>
                           <p className='text-sm text-gray-500'>
                             API Key: {APIkey}
                           </p>
