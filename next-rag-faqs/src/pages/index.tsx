@@ -9,10 +9,12 @@ import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API
 
 export default function Home() {
   const [step, setStep] = useState<number>(0)
-  const [endpoint, setEndpoint] = useState<string>('')
+  const [endpoint, setEndpoint] = useState<string>()
+  const [error, setError] = useState<string>()
   const [session, setSession] = useState<string>('')
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [isUploading, setIsUploading] = useState<boolean>(false)
@@ -64,11 +66,23 @@ export default function Home() {
   const handleSession = async () => {
     //set your base endpoint api  and get session for using request upload and ask
     if (step === 0 && typeof endpoint !== 'undefined' && endpoint !== '') {
-      axios.defaults.baseURL = endpoint
-      //Edit here for set request session
-      const { data } = await axios.get(PATH_SESSION)
-      setSession(data.uuid)
-      handleNext()
+      try {
+        const validateEndpoint = new URL(endpoint)
+        console.log(validateEndpoint)
+        axios.defaults.baseURL = validateEndpoint.href
+        const { data } = await axios.get(PATH_SESSION)
+        setSession(data.uuid)
+        handleNext()
+      } catch (error) {
+        if (endpoint.length !== 40) {
+          return setError('invalid Endpoint or API Key ')
+        }
+        localStorage.apiKey = endpoint
+        axios.defaults.headers.common['x-api-key'] = endpoint
+        const { data } = await axios.get(PATH_SESSION)
+        setSession(data.uuid)
+        handleNext()
+      }
     }
   }
 
@@ -93,7 +107,13 @@ export default function Home() {
               src='/animation/connect.mp4'
               ref={videoEl}
             />
-            <APIInput endpoint={endpoint} onEndpointChange={onEndpointChange} />
+            <div>
+              <APIInput
+                endpoint={endpoint}
+                onEndpointChange={onEndpointChange}
+              />
+              {!!error && <p className='text-sm text-rose-500 mt-2'>{error}</p>}
+            </div>
             <div className='flex justify-center flex-col items-end mt-6 w-full'>
               <button
                 className='bg-blue-600 text-white rounded-lg px-6 py-1 text-xl'
@@ -144,6 +164,10 @@ export default function Home() {
 
   useEffect(() => {
     attemptPlay()
+  }, [])
+
+  useEffect(() => {
+    if (window && localStorage.apiKey) setEndpoint(localStorage.apiKey)
   }, [])
 
   return (

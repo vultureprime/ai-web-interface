@@ -12,7 +12,7 @@ const APIInput: React.FC<APIInputProps> = ({ endpoint, onEndpointChange }) => {
         type='text'
         value={endpoint}
         onChange={(e) => onEndpointChange(e.target.value)}
-        placeholder='Please Enter your endpoint'
+        placeholder='Please Enter your endpoint or API key'
         className='outline-none w-full max-w-[320px] lg:w-[320px] border border-gray-200 rounded-lg px-2 py-1'
       />
     </div>

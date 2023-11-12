@@ -6,18 +6,18 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueries } from '@tanstack/react-query'
 import axios from 'axios'
 import { Inter } from 'next/font/google'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
 import { z } from 'zod'
 
 const inter = Inter({ subsets: ['latin'] })
 
-const endpointAPi = process.env.NEXT_PUBLIC_API
-axios.defaults.baseURL = endpointAPi
+const api_url = process.env.NEXT_PUBLIC_API
+axios.defaults.baseURL = api_url
 
 export const askScheme = z.object({
-  endpoint: z.string().url().optional().or(z.literal('')),
+  apiKey: z.string().optional(),
   query: z.string(),
   bot: z.string({}).optional(),
 })
@@ -50,11 +50,11 @@ export default function Home() {
 
   const { mutateAsync: queryPromt } = useMutation({
     mutationFn: ({ query_str }: { query_str: string }) => {
-      return axios.get(`/queryWithPrompt?query_str=${query_str}`)
+      return axios.post(`/query`)
     },
-    onError: () => {
+    onError: (error) => {
       setError('bot', {
-        message: 'There was an error fetching the response.',
+        message: error?.message ?? 'Something went wrong',
       })
     },
   })
@@ -66,12 +66,14 @@ export default function Home() {
   })
 
   const [answer, setAnswer] = useState<ChatProps[]>([])
+
   const methods = useForm<IOpenAIForm>({
     resolver: zodResolver(askScheme),
     mode: 'onChange',
     shouldFocusError: true,
     defaultValues: {
-      endpoint: endpointAPi,
+      apiKey: '',
+      query: 'Write SQL in PostgresSQL format. Get average hight of student.',
     },
   })
 
@@ -83,7 +85,7 @@ export default function Home() {
     formState: { errors },
   } = methods
 
-  const endpoint = useWatch({ name: 'endpoint', control })
+  const apiKey = useWatch({ name: 'apiKey', control })
 
   const onSetTab = (selectedTab: TabState) => {
     setState(selectedTab)
@@ -96,16 +98,22 @@ export default function Home() {
     ])
   }
 
-  const onEditEndpoint = () => {
+  const onEditapiKey = () => {
     setIsEdit(true)
   }
-  console.log(errors)
-  const onSaveEndpoint = () => {
-    if (!!errors.endpoint?.message) {
+
+  const onSaveapiKey = () => {
+    if (!!errors.apiKey?.message) {
       return
     }
+    if (apiKey?.length !== 40) {
+      setError('apiKey', {
+        message: 'There was an error fetching the response.',
+      })
+    }
 
-    axios.defaults.baseURL = endpoint
+    axios.defaults.headers.common['x-api-key'] = apiKey
+    localStorage.apiKey = apiKey
     setIsEdit(false)
   }
   const onRandomData = async () => {
@@ -114,15 +122,19 @@ export default function Home() {
     refetchAllData()
   }
   const onSubmit = async (data: IOpenAIForm) => {
-    addToAnswers('user', data.query)
-    const result = await queryPromt({ query_str: data.query })
-    if (result) {
-      setValue('query', '')
-      return addToAnswers(
-        'ai',
-        result.data?.result as string,
-        result.data?.['SQL Query'] as string
-      )
+    try {
+      addToAnswers('user', data.query)
+      const result = await queryPromt({ query_str: data.query })
+      if (result) {
+        setValue('query', '')
+        return addToAnswers(
+          'ai',
+          result.data?.result as string,
+          result.data?.['SQL Query'] as string
+        )
+      }
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -142,6 +154,13 @@ export default function Home() {
     }
     return Object.values(allData) as DataRow[]
   }, [allData])
+
+  useEffect(() => {
+    if (window && localStorage?.apiKey) {
+      setValue('apiKey', localStorage.apiKey)
+      axios.defaults.headers.common['x-api-key'] = localStorage.apiKey
+    }
+  }, [])
 
   return (
     <main
@@ -213,23 +232,21 @@ export default function Home() {
           >
             <div className='mt-5 mx-auto flex justify-center flex-col items-center bg-white border border-gray-50 w-full xl:w-[540px] p-8 rounded-3xl'>
               <div className='flex justify-between items-end w-full gap-x-8 mb-5'>
-                {isEdit ? (
+                {isEdit && (
                   <RHFTextField
-                    label='Endpoint'
-                    name='endpoint'
-                    placeholder='Please Enter your endpoint'
+                    label='API key'
+                    name='apiKey'
+                    placeholder='Please Enter your API Key'
                     className='outline-none w-full border border-gray-200 rounded-lg px-2 py-1'
                   />
-                ) : (
-                  <p className='truncate max-w-[280px]'>{endpoint}</p>
                 )}
-
+                <div className='flex-1' />
                 <button
                   type='button'
                   className='bg-blue-600 text-white rounded-lg px-6 py-2 text-sm h-fit whitespace-nowrap'
-                  onClick={isEdit ? onSaveEndpoint : onEditEndpoint}
+                  onClick={isEdit ? onSaveapiKey : onEditapiKey}
                 >
-                  {isEdit ? 'Save' : 'Edit'}
+                  {isEdit ? 'Save' : 'Add API key'}
                 </button>
               </div>
               <div className='flex gap-x-2 w-full'>

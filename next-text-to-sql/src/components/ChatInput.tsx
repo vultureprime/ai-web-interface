@@ -13,6 +13,7 @@ const ChatInput: FC<ChatInputProps> = ({ isLoading }) => {
           type='text'
           placeholder='Ask a question...'
           className='outline-none w-full border-none'
+          disabled={true}
           name='query'
         />
         <button

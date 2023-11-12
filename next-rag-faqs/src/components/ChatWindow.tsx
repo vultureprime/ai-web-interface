@@ -83,7 +83,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
           </div>
           <div>
             <p className='font-bold'>Ai</p>
-            <p>Something went wrong</p>
+            <p>{error}</p>
           </div>
         </div>
       )}

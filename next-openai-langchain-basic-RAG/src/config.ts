@@ -12,8 +12,8 @@ export const defaultValues = {
 
 export const stepInfo = [
   {
-    title: 'Enter Endpoint API',
-    desc: 'Begin by inputting the Endpoint API data you wish to connect with.',
+    title: 'Enter Endpoint API or API Key',
+    desc: 'Begin by inputting the Endpoint API or API Key you wish to connect with.',
     icon: 'carbon:api',
   },
   {
