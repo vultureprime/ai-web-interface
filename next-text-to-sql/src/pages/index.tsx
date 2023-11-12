@@ -52,9 +52,10 @@ export default function Home() {
     mutationFn: ({ query_str }: { query_str: string }) => {
       return axios.post(`/query`)
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      console.log(error)
       setError('bot', {
-        message: error?.message ?? 'Something went wrong',
+        message: error?.response?.data?.message ?? 'Something went wrong',
       })
     },
   })
