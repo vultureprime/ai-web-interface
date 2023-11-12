@@ -3,7 +3,6 @@ const posts = [
     id: 1,
     title: 'Q&A Document',
     href: '#',
-
     imageUrl: '/images/q&a.png',
     category: { title: 'RAG', href: '#' },
   },
@@ -13,7 +12,14 @@ const posts = [
     href: '#',
 
     imageUrl: '/images/sql.png',
-    category: { title: 'RAG', href: '#' },
+    category: { title: 'LlamaIndex and OpenAI', href: '#' },
+  },
+  {
+    id: 2,
+    title: 'Chat Bot',
+    href: '#',
+    imageUrl: '/images/chat.png',
+    category: { title: 'OpenAI', href: '#' },
   },
 ]
 
