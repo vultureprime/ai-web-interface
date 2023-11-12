@@ -34,8 +34,8 @@ export default function ChatWidget({ session }: { session: string }) {
         uuid: session,
       })
       addToAnswers('ai', data.answer)
-    } catch (error) {
-      setError('There was an error fetching the response.')
+    } catch (error: any) {
+      setError(error?.response?.data?.message ?? 'Something went wrong')
       console.error('Error fetching from API:', error)
     } finally {
       setLoading(false)

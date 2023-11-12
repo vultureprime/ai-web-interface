@@ -50,7 +50,7 @@ export default function Home() {
 
   const { mutateAsync: queryPromt } = useMutation({
     mutationFn: ({ query_str }: { query_str: string }) => {
-      return axios.post(`/queryWithPrompt?query_str=${query_str}`)
+      return axios.post(`/query`)
     },
     onError: () => {
       setError('bot', {
@@ -73,6 +73,7 @@ export default function Home() {
     shouldFocusError: true,
     defaultValues: {
       apiKey: '',
+      query: 'Write SQL in PostgresSQL format. Get average hight of student.',
     },
   })
 
@@ -105,6 +106,11 @@ export default function Home() {
     if (!!errors.apiKey?.message) {
       return
     }
+    if (apiKey?.length !== 40) {
+      setError('apiKey', {
+        message: 'There was an error fetching the response.',
+      })
+    }
 
     axios.defaults.headers.common['x-api-key'] = apiKey
     localStorage.apiKey = apiKey
@@ -116,15 +122,19 @@ export default function Home() {
     refetchAllData()
   }
   const onSubmit = async (data: IOpenAIForm) => {
-    addToAnswers('user', data.query)
-    const result = await queryPromt({ query_str: data.query })
-    if (result) {
-      setValue('query', '')
-      return addToAnswers(
-        'ai',
-        result.data?.result as string,
-        result.data?.['SQL Query'] as string
-      )
+    try {
+      addToAnswers('user', data.query)
+      const result = await queryPromt({ query_str: data.query })
+      if (result) {
+        setValue('query', '')
+        return addToAnswers(
+          'ai',
+          result.data?.result as string,
+          result.data?.['SQL Query'] as string
+        )
+      }
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -147,7 +157,8 @@ export default function Home() {
 
   useEffect(() => {
     if (window && localStorage?.apiKey) {
-      setValue('apiKey', localStorage?.apiKey)
+      setValue('apiKey', localStorage.apiKey)
+      axios.defaults.headers.common['x-api-key'] = localStorage.apiKey
     }
   }, [])
 
