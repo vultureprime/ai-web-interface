@@ -73,12 +73,9 @@ export default function Home() {
         const { data } = await axios.get(PATH_SESSION)
         setSession(data.uuid)
         handleNext()
-      } catch {
-        if (endpoint.includes('http://')) {
-          return setError('invalid API Endpoint')
-        }
-        if (endpoint.length < 40) {
-          return setError('invalid API Key')
+      } catch (error) {
+        if (endpoint.length !== 40) {
+          return setError('invalid Endpoint or API Key ')
         }
         localStorage.apiKey = endpoint
         axios.defaults.headers.common['x-api-key'] = endpoint
