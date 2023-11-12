@@ -16,7 +16,8 @@ export default function Chat() {
   const [answer, setAnswer] = useState<ChatProps[]>([])
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState<string>()
-  const [endpoint, setEndpoint] = useState<string>()
+  const [errorAPIKey, setErrorAPIKey] = useState<string>()
+  const [apiKey, setAPIKey] = useState<string>()
   const [isEdit, setEdit] = useState(true)
   const chatWindowRef = useRef<HTMLDivElement>(null)
 
@@ -28,7 +29,7 @@ export default function Chat() {
     setQuestion('')
 
     try {
-      const { data } = await axios.post('/api/chatbot', { question, endpoint })
+      const { data } = await axios.post('/api/chatbot', { question, apiKey })
       addToAnswers('ai', data)
     } catch (error) {
       setError('There was an error fetching the response.')
@@ -44,22 +45,34 @@ export default function Chat() {
       { role, message, id: prevState.length.toString() },
     ])
   }
-  const onEditToggle = () => setEdit(!isEdit)
-  const onEndpointChange = (value: string) => {
-    setEndpoint(value)
+  const onEditToggle = () => {
+    if (apiKey?.length === 40) {
+      localStorage.apiKey = apiKey
+      setErrorAPIKey('')
+      return setEdit(!isEdit)
+    } else {
+      setErrorAPIKey('Invalid API Key')
+    }
+  }
+  const onChangeInput = (value: string) => {
+    setAPIKey(value)
   }
 
   useEffect(() => {
     document.querySelector('input')?.focus()
+    if (localStorage?.apiKey) {
+      setAPIKey(localStorage?.apiKey)
+    }
   }, [])
 
   return (
     <div className='h-screen flex flex-col  mx-auto pt-[40px]'>
       <Header
-        endpoint={endpoint}
+        apiKey={apiKey}
         isEdit={isEdit}
-        onEndpointChange={onEndpointChange}
+        onChangeInput={onChangeInput}
         onEditToggle={onEditToggle}
+        errorAPIKey={errorAPIKey}
       />
       <ChatWindow
         messages={answer}

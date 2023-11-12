@@ -14,16 +14,17 @@ export default async function handler(
     return res.status(405).end()
   }
 
-  const { question, endpoint } = req.body
+  const { question, apiKey } = req.body
 
   try {
     // Make a request using Axios
     const response = await axios({
       method: 'post',
-      url: endpoint ?? process.env.NEXT_API,
+      url: process.env.NEXT_PUBLIC_API,
       headers: {
         Accept: 'text/event-stream',
         'Content-Type': 'application/json',
+        'x-api-key': apiKey,
       },
       data: JSON.stringify({ question }),
       responseType: 'stream',
