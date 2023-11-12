@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/24/outline'
 import { useMutation } from '@tanstack/react-query'
@@ -24,6 +24,7 @@ export default function Alert({
     register,
     handleSubmit,
     setError,
+    reset,
     formState: { errors, isSubmitSuccessful },
   } = useForm<Inputs>({})
   const [APIkey, setAPIkey] = useState<string>()
@@ -37,8 +38,8 @@ export default function Alert({
       setAPIkey(result?.data.value)
     } catch (error: any) {
       console.error(error)
-      if (error?.response.data.detail?.includes('Key already exist')) {
-        return setError('email', { message: 'Limit your request key' })
+      if (error?.response.data.detail) {
+        return setError('email', { message: error?.response.data.detail })
       }
     }
   }

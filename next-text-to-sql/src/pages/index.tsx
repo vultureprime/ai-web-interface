@@ -52,9 +52,9 @@ export default function Home() {
     mutationFn: ({ query_str }: { query_str: string }) => {
       return axios.post(`/query`)
     },
-    onError: () => {
+    onError: (error) => {
       setError('bot', {
-        message: 'There was an error fetching the response.',
+        message: error?.message ?? 'Something went wrong',
       })
     },
   })

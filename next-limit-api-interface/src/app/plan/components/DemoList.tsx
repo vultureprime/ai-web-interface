@@ -3,8 +3,7 @@ const posts = [
     id: 1,
     title: 'Q&A Document',
     href: '#',
-    description:
-      'Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.',
+
     imageUrl: '/images/q&a.png',
     category: { title: 'RAG', href: '#' },
   },
@@ -12,8 +11,7 @@ const posts = [
     id: 2,
     title: 'Text to SQL',
     href: '#',
-    description:
-      'Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.',
+
     imageUrl: '/images/sql.png',
     category: { title: 'RAG', href: '#' },
   },
@@ -62,9 +60,6 @@ export default function DemoList() {
                       {post.title}
                     </a>
                   </h3>
-                  <p className='mt-5 line-clamp-3 text-sm leading-6 text-gray-600'>
-                    {post.description}
-                  </p>
                 </div>
               </div>
             </article>
