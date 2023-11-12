@@ -3,30 +3,33 @@
 import { useQuery } from '@tanstack/react-query'
 import { Key, useState } from 'react'
 import Alert from './Alert'
+import { useRouter } from 'next/navigation'
+import axios from 'axios'
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_KEY_URL
 
 export default function PlanDetail() {
   const [open, setOpen] = useState(false)
   const [selectedTier, setSelectedTier] = useState('')
+  const navigate = useRouter()
   const popularTier = 1
   const { data } = useQuery({
     queryKey: ['repoData'],
-    queryFn: () =>
-      fetch(process.env.NEXT_PUBLIC_API_KEY_URL + '/plan').then((res) =>
-        res.json()
-      ),
+    queryFn: async () => {
+      const { data } = await axios.get('/plan')
+      return data
+    },
   })
 
-  const onTryIt = async (plan_name: string) => {
-    try {
-      setSelectedTier(plan_name)
-      setOpen(true)
-    } catch (error) {
-      console.log(error)
+  const onTryIt = async (plan_name: string, contact: boolean) => {
+    if (contact) {
+      return navigate.push('#contact')
     }
+    setSelectedTier(plan_name)
+    setOpen(true)
   }
 
   return (
@@ -90,16 +93,16 @@ export default function PlanDetail() {
                   <p className='mt-6 flex items-baseline gap-x-1'>
                     <span className='text-4xl font-bold tracking-tight text-gray-900'>
                       {tier.name
-                        .replace('RequestPerMonth', ' request')
+                        .replace('RequestPerDay', ' request')
                         .replace('free-tier', '5 request')}
                     </span>
                     <span className='text-sm font-semibold leading-6 text-gray-600'>
-                      /month
+                      /day
                     </span>
                   </p>
                 </div>
                 <button
-                  onClick={() => onTryIt(tier.name)}
+                  onClick={() => onTryIt(tier.name, tierIdx === popularTier)}
                   className={classNames(
                     tierIdx === popularTier
                       ? 'bg-indigo-600 text-white shadow-sm hover:bg-indigo-500'
@@ -107,7 +110,7 @@ export default function PlanDetail() {
                     'mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
                   )}
                 >
-                  Try it
+                  {tierIdx === popularTier ? 'Contact Us' : 'Try it'}
                 </button>
               </div>
             )
