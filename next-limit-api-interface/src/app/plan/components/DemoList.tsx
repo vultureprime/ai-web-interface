@@ -2,14 +2,14 @@ const posts = [
   {
     id: 1,
     title: 'Q&A Document',
-    href: 'http://13.229.123.142:3001/',
+    href: 'https://rag.vultureprime.com/',
     imageUrl: '/images/q&a.png',
     category: { title: 'RAG', href: '#' },
   },
   {
     id: 2,
     title: 'Text to SQL',
-    href: 'http://13.229.123.142:3002/',
+    href: 'https://sql.vultureprime.com',
 
     imageUrl: '/images/sql.png',
     category: { title: 'LlamaIndex and OpenAI', href: '#' },
@@ -17,7 +17,7 @@ const posts = [
   {
     id: 3,
     title: 'Chat Bot',
-    href: 'http://13.229.123.142:3003/',
+    href: 'https://chatbot.vultureprime.com',
     imageUrl: '/images/chat.png',
     category: { title: 'OpenAI', href: '#' },
   },
