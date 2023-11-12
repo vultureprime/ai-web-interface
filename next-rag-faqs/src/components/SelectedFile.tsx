@@ -40,12 +40,12 @@ const SelectedFile: React.FC<SelectedFileProps> = ({
           {!isLoading ? (
             <Icon
               icon='ep:upload-filled'
-              className='text-blue-500'
+              className='text-blue-500 mx-auto'
               width={240}
             />
           ) : (
             <video
-              className='w-[240px] h-[240px]'
+              className='w-[240px] h-[240px] mx-auto'
               playsInline
               loop
               muted

@@ -9,7 +9,7 @@ import axios from 'axios'
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_KEY_URL
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API
 
 export default function PlanDetail() {
   const [open, setOpen] = useState(false)
