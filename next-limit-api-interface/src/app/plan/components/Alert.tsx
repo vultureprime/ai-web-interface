@@ -109,7 +109,7 @@ export default function Alert({
                         >
                           <input
                             type='email'
-                            className='border border-gray-200 rounded-lg px-4 py-2 w-full'
+                            className='border border-gray-200 rounded-lg px-4 py-2 w-full text-black'
                             placeholder='email'
                             {...register('email', {
                               required: true,

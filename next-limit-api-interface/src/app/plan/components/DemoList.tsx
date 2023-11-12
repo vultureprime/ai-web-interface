@@ -15,7 +15,7 @@ const posts = [
     category: { title: 'LlamaIndex and OpenAI', href: '#' },
   },
   {
-    id: 2,
+    id: 3,
     title: 'Chat Bot',
     href: '#',
     imageUrl: '/images/chat.png',

@@ -29,7 +29,20 @@ export default function Chat() {
     setQuestion('')
 
     try {
-      const { data } = await axios.post('/api/chatbot', { question, apiKey })
+      const { data } = await axios.post(
+        process.env.NEXT_PUBLIC_API + '/answer',
+        { question },
+        {
+          headers: {
+            Accept: 'text/event-stream',
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+          },
+
+          responseType: 'stream',
+        }
+      )
+
       addToAnswers('ai', data)
     } catch (error) {
       setError('There was an error fetching the response.')
