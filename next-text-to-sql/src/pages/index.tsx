@@ -165,7 +165,7 @@ export default function Home() {
 
   return (
     <main
-      className={`flex min-h-screen flex-col items-center justify-between  p-5 md:p-10 lg:p-24 bg-slate-50 ${inter.className}`}
+      className={`flex min-h-screen flex-col items-center justify-between  p-5 md:p-10 lg:p-24 bg-slate-50 ${inter.className} text-black`}
     >
       <div className='border border-slate-200 bg-slate-100 rounded-xl p-6 w-full'>
         <div className='flex gap-x-6 xl:hidden'>
