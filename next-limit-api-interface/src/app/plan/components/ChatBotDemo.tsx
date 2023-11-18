@@ -1,8 +1,8 @@
-import ChatWidget, { ChatProps, Role } from '@@/app/components/ChatWidget'
+import ChatWidget, { ChatProps } from '@@/app/components/ChatWidget'
 import FormProvider from '@@/app/components/hook-form/FormProvider'
 import RHFTextField from '@@/app/components/hook-form/RHFTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
@@ -14,38 +14,21 @@ export const askScheme = z.object({
   bot: z.string({}).optional(),
 })
 
-const API_BOT = 'http://13.229.123.142:8005'
+const API_BOT = process.env.NEXT_PUBLIC_API_BOT
+
 export interface IOpenAIForm extends z.infer<typeof askScheme> {}
 
 export default function ChatBotDemo() {
   const [isEdit, setIsEdit] = useState(false)
   const [streamText, setStreamText] = useState('')
 
-  useQuery({
+  const { data: session } = useQuery({
     queryKey: ['session'],
     queryFn: async () => {
       const { data } = await axios.get(`${API_BOT}/session`)
       return data
     },
     enabled: !localStorage?.session,
-    select({ data }) {
-      localStorage.session = data.uuid
-    },
-  })
-
-  const { mutateAsync: queryPromt } = useMutation({
-    mutationFn: ({ query_str }: { query_str: string }) => {
-      return axios.post(`${API_BOT}/query`, {
-        message: query_str,
-        uuid: localStorage.session,
-      })
-    },
-    onError: (error: any) => {
-      console.log(error)
-      setError('bot', {
-        message: error?.response?.data?.message ?? 'Something went wrong',
-      })
-    },
   })
 
   const [answer, setAnswer] = useState<ChatProps[]>([])
@@ -65,7 +48,9 @@ export default function ChatBotDemo() {
     setError,
     setValue,
     control,
-    formState: { errors },
+    watch,
+
+    formState: { errors, isSubmitSuccessful, submitCount },
   } = methods
 
   const apiKey = useWatch({ name: 'apiKey', control })
@@ -83,10 +68,61 @@ export default function ChatBotDemo() {
         message: 'There was an error fetching the response.',
       })
     }
-    axios.defaults.headers.common['x-api-key'] = apiKey
     localStorage.apiKey = apiKey
     setIsEdit(false)
   }
+
+  useEffect(() => {
+    if (typeof session?.uuid === 'string') localStorage.session = session.uuid
+  }, [session])
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setValue('query', '')
+        const message = { query: watch('query') }
+        const response = await fetch(
+          `${API_BOT}/query?uuid=${localStorage.session}&message=${message.query}`,
+          {
+            method: 'GET',
+            headers: {
+              Accept: 'text/event-stream',
+              'x-api-key': localStorage.apiKey,
+            },
+          }
+        )
+        const reader = response.body!.getReader()
+        let result = ''
+        while (true) {
+          const { done, value } = await reader?.read()
+          if (done) {
+            setStreamText('')
+            setAnswer((prevState) => [
+              ...prevState,
+              {
+                id: (prevState.length + 1).toString(),
+                role: 'ai',
+                message: result,
+              },
+            ])
+            break
+          }
+          result += new TextDecoder().decode(value)
+          setStreamText(
+            (prevData) => prevData + new TextDecoder().decode(value)
+          )
+        }
+      } catch (error: any) {
+        console.error(error)
+        setError('bot', {
+          message: error?.response?.data?.message ?? 'Something went wrong',
+        })
+      }
+    }
+    if (isSubmitSuccessful) {
+      getData()
+    }
+  }, [submitCount, isSubmitSuccessful, setValue, watch, setError])
 
   const onSubmit = async (data: IOpenAIForm) => {
     try {
@@ -99,29 +135,6 @@ export default function ChatBotDemo() {
           message: data.query,
         },
       ])
-      const response = await queryPromt({ query_str: data.query })
-      console.log(response)
-      if (response) {
-        setValue('query', '')
-        const streamReader = response.data.getReader()
-        let result = ''
-        while (true) {
-          const { done, value } = await streamReader.read()
-          if (done) {
-            setAnswer((prevState) => [
-              ...prevState,
-              {
-                id: (id + 1).toString(),
-                role: 'ai',
-                message: result,
-              },
-            ])
-            setStreamText('')
-          }
-          result += value
-          setStreamText(result)
-        }
-      }
     } catch (error) {
       console.error(error)
     }
@@ -130,9 +143,8 @@ export default function ChatBotDemo() {
   useEffect(() => {
     if (window && localStorage?.apiKey) {
       setValue('apiKey', localStorage.apiKey)
-      axios.defaults.headers.common['x-api-key'] = localStorage.apiKey
     }
-  }, [])
+  }, [setValue])
 
   return (
     <div id='demo' className='bg-white py-24 sm:py-32'>
