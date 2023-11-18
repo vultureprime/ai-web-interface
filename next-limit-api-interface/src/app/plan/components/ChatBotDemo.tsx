@@ -28,7 +28,7 @@ export default function ChatBotDemo() {
       const { data } = await axios.get(`${API_BOT}/session`)
       return data
     },
-    enabled: !localStorage?.session,
+    enabled: typeof window !== 'undefined' && !localStorage?.session,
   })
 
   const [answer, setAnswer] = useState<ChatProps[]>([])
@@ -73,7 +73,9 @@ export default function ChatBotDemo() {
   }
 
   useEffect(() => {
-    if (typeof session?.uuid === 'string') localStorage.session = session.uuid
+    if (typeof session?.uuid === 'string') {
+      localStorage.session = session.uuid
+    }
   }, [session])
 
   useEffect(() => {
@@ -83,12 +85,12 @@ export default function ChatBotDemo() {
         setValue('query', '')
 
         const response = await fetch(
-          `${API_BOT}/query?uuid=${localStorage.session}&message=${message.query}`,
+          `${API_BOT}/query?uuid=${localStorage?.session}&message=${message.query}`,
           {
             method: 'GET',
             headers: {
               Accept: 'text/event-stream',
-              'x-api-key': localStorage.apiKey,
+              'x-api-key': localStorage?.apiKey,
             },
           }
         )
@@ -120,7 +122,7 @@ export default function ChatBotDemo() {
         })
       }
     }
-    if (isSubmitSuccessful) {
+    if (isSubmitSuccessful && localStorage) {
       getData()
     }
   }, [submitCount, isSubmitSuccessful, setValue, watch, setError])
