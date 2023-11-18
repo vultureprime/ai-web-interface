@@ -11,13 +11,17 @@
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
+    "@hookform/resolvers": "^3.3.2",
+    "@iconify/react": "^4.1.1",
     "@tanstack/react-query": "^5.8.1",
     "axios": "^1.6.1",
     "next": "14.0.2",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.48.2",
-    "uuid": "^9.0.1"
+    "tailwind-merge": "^2.0.0",
+    "uuid": "^9.0.1",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20",

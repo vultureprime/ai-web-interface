@@ -1,4 +1,5 @@
 'use client'
+import ChatBotDemo from './plan/components/ChatBotDemo'
 import Contact from './plan/components/Contact'
 import DemoList from './plan/components/DemoList'
 import PlanDetail from './plan/components/PlanDetail'
@@ -12,6 +13,7 @@ export default function Home() {
     <QueryClientProvider client={queryClient}>
       <PlanHero />
       <PlanDetail />
+      <ChatBotDemo />
       <DemoList />
       <Contact />
     </QueryClientProvider>
