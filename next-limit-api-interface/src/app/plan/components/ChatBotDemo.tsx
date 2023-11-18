@@ -122,7 +122,7 @@ export default function ChatBotDemo() {
         })
       }
     }
-    if (isSubmitSuccessful && localStorage) {
+    if (isSubmitSuccessful) {
       getData()
     }
   }, [submitCount, isSubmitSuccessful, setValue, watch, setError])
