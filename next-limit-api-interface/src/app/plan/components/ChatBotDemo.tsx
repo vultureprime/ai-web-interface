@@ -10,7 +10,7 @@ import { z } from 'zod'
 
 export const askScheme = z.object({
   apiKey: z.string().optional(),
-  query: z.string(),
+  query: z.string().trim().min(1, { message: 'Please enter your message' }),
   bot: z.string({}).optional(),
 })
 
@@ -77,10 +77,11 @@ export default function ChatBotDemo() {
   }, [session])
 
   useEffect(() => {
+    const message = { query: watch('query') }
     const getData = async () => {
       try {
         setValue('query', '')
-        const message = { query: watch('query') }
+
         const response = await fetch(
           `${API_BOT}/query?uuid=${localStorage.session}&message=${message.query}`,
           {
