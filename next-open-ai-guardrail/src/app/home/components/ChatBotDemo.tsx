@@ -73,7 +73,10 @@ export default function ChatBotDemo() {
   const endPoint = useWatch({ name: 'endpoint', control: controlEndpoint })
   const apiKey = useWatch({ name: 'apiKey', control })
 
-  const [{ data: session }, { data: rule, refetch: refetchRule }] = useQueries({
+  const [
+    { data: session, refetch: refreshSession },
+    { data: rule, refetch: refetchRule },
+  ] = useQueries({
     queries: [
       {
         queryKey: ['session', endPoint],
@@ -211,6 +214,15 @@ export default function ChatBotDemo() {
             )
           }
         } else {
+          if (response.status === 404) {
+            localStorage.removeItem('session')
+            refreshSession()
+            setError('bot', {
+              message: 'Something went wrong, please try again',
+            })
+            return
+          }
+
           setError('bot', {
             message: 'Something went wrong',
           })

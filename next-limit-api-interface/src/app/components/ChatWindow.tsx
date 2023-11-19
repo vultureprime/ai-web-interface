@@ -63,8 +63,8 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                 />
               </div>
               <div className='w-full'>
-                <p className='font-bold'>Ai</p>
                 <div className='flex justify-between mb-1 w-full '>
+                  <p className='font-bold'>Ai</p>
                   <div />
                   <CopyClipboard content={item.message} />
                 </div>
