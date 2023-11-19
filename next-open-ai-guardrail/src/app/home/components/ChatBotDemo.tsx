@@ -203,7 +203,7 @@ export default function ChatBotDemo() {
             method: 'GET',
             headers: {
               Accept: 'text/event-stream',
-              'x-api-key': apiKey,
+              'x-api-key': apiKey ?? '',
             },
           }
         )
@@ -260,6 +260,7 @@ export default function ChatBotDemo() {
     setError,
     endPoint,
     refreshSession,
+    apiKey,
   ])
 
   useEffect(() => {
