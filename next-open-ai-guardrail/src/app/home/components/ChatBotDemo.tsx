@@ -15,7 +15,7 @@ export const askScheme = z.object({
 })
 
 export const ruleScheme = z.object({
-  rule: z.string().trim().min(1, { message: 'Please enter your message' }),
+  rule: z.string().trim().min(1, { message: 'Please enter your rule' }),
 })
 
 export const endpointScheme = z.object({
