@@ -8,7 +8,7 @@ interface ChatInputProps {
 const ChatInput: FC<ChatInputProps> = ({ isLoading }) => {
   return (
     <div className='border-t border-gray-300 p-4 flex items-center justify-center bg-white py-8'>
-      <div className='flex items-center justify-center bg-white max-w-screen-md w-[calc(100%-64px)] px-8 py-4 rounded-full shadow-md'>
+      <div className='flex items-center justify-center  bg-white max-w-screen-md w-full px-8 py-4 rounded-full shadow-md'>
         <RHFTextField
           type='text'
           placeholder='Ask a question...'
