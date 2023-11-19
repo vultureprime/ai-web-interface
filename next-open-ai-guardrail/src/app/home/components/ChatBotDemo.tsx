@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { z } from 'zod'
 
+const ADMIN_KEY = 'vultureprime_admin_apikey'
+
 export const askScheme = z.object({
   apiKey: z.string().optional(),
   query: z.string().trim().min(1, { message: 'Please enter your message' }),
@@ -79,11 +81,11 @@ export default function ChatBotDemo() {
   ] = useQueries({
     queries: [
       {
-        queryKey: ['session', endPoint, apiKey],
+        queryKey: ['session', endPoint],
         queryFn: async () => {
           const { data } = await axios.get(`/session`, {
             headers: {
-              'x-api-key': localStorage?.apiKey,
+              'x-api-key': ADMIN_KEY,
             },
           })
           return data
@@ -91,11 +93,11 @@ export default function ChatBotDemo() {
         enabled: typeof window !== 'undefined' && !localStorage?.session,
       },
       {
-        queryKey: ['rule', endPoint, apiKey],
+        queryKey: ['rule', endPoint],
         queryFn: async () => {
           const { data } = await axios.get(`/rule`, {
             headers: {
-              'x-api-key': localStorage?.apiKey,
+              'x-api-key': ADMIN_KEY,
             },
           })
           return data
@@ -106,7 +108,13 @@ export default function ChatBotDemo() {
 
   const { mutateAsync: createRule } = useMutation({
     mutationFn: (rule: string) => {
-      return axios.post('/create_rule', { rule })
+      return axios.post(
+        '/create_rule',
+        { rule },
+        {
+          headers: { 'x-api-key': ADMIN_KEY },
+        }
+      )
     },
     onSuccess: () => {
       refetchRule()
@@ -115,7 +123,9 @@ export default function ChatBotDemo() {
 
   const { mutateAsync: clearRule } = useMutation({
     mutationFn: () => {
-      return axios.get('/clear_collection')
+      return axios.get('/clear_collection', {
+        headers: { 'x-api-key': ADMIN_KEY },
+      })
     },
     onSuccess: () => {
       refetchRule()
