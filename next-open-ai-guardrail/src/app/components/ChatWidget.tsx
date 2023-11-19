@@ -22,9 +22,6 @@ export default function ChatWidget({
   const {
     formState: { isLoading, errors },
   } = useFormContext()
-  useEffect(() => {
-    document.querySelector('input')?.focus()
-  }, [])
 
   return (
     <div className='h-[700px] flex flex-col w-full'>

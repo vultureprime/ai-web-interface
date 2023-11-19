@@ -38,19 +38,19 @@ export default function ChatBotDemo() {
 
   const methodRule = useForm<IRuleForm>({
     resolver: zodResolver(ruleScheme),
-    mode: 'onChange',
+
     shouldFocusError: true,
   })
 
   const methodsEndpoint = useForm<IEndPointForm>({
     resolver: zodResolver(endpointScheme),
-    mode: 'onChange',
+
     shouldFocusError: true,
   })
 
   const methods = useForm<IOpenAIForm>({
     resolver: zodResolver(askScheme),
-    mode: 'onChange',
+
     shouldFocusError: true,
     defaultValues: {
       apiKey: '',

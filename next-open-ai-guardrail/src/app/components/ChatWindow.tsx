@@ -24,7 +24,11 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   streamText,
 }) => {
   useEffect(() => {
-    if (chatWindowRef !== null && chatWindowRef?.current) {
+    if (
+      chatWindowRef !== null &&
+      chatWindowRef?.current &&
+      messages.length > 0
+    ) {
       chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight
     }
   }, [streamText, messages.length, chatWindowRef])
