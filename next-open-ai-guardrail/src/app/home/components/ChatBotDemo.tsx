@@ -191,8 +191,9 @@ export default function ChatBotDemo() {
             },
           }
         )
-        const reader = response.body!.getReader()
+
         if (response.status === 200) {
+          const reader = response.body!.getReader()
           let result = ''
           while (true) {
             const { done, value } = await reader?.read()
@@ -209,9 +210,7 @@ export default function ChatBotDemo() {
               break
             }
             result += new TextDecoder().decode(value)
-            setStreamText(
-              (prevData) => prevData + new TextDecoder().decode(value)
-            )
+            setStreamText(result)
           }
         } else {
           if (response.status === 404) {
@@ -237,7 +236,15 @@ export default function ChatBotDemo() {
     if (isSubmitSuccessful && localStorage) {
       getData()
     }
-  }, [submitCount, isSubmitSuccessful, setValue, watch, setError, endPoint])
+  }, [
+    submitCount,
+    isSubmitSuccessful,
+    setValue,
+    watch,
+    setError,
+    endPoint,
+    refreshSession,
+  ])
 
   useEffect(() => {
     if (window && localStorage?.apiKey) {

@@ -22,7 +22,7 @@ export default function ChatBotDemo() {
   const [isEdit, setIsEdit] = useState(false)
   const [streamText, setStreamText] = useState('')
 
-  const { data: session } = useQuery({
+  const { data: session, refetch: refreshSession } = useQuery({
     queryKey: ['session'],
     queryFn: async () => {
       const { data } = await axios.get(`${API_BOT}/session`)
@@ -94,29 +94,38 @@ export default function ChatBotDemo() {
             },
           }
         )
-        const reader = response.body!.getReader()
-        let result = ''
-        while (true) {
-          const { done, value } = await reader?.read()
-          if (done) {
-            setStreamText('')
-            setAnswer((prevState) => [
-              ...prevState,
-              {
-                id: (prevState.length + 1).toString(),
-                role: 'ai',
-                message: result,
-              },
-            ])
-            break
+        if (response.status === 200) {
+          const reader = response.body!.getReader()
+          let result = ''
+          while (true) {
+            const { done, value } = await reader?.read()
+            if (done) {
+              setStreamText('')
+              setAnswer((prevState) => [
+                ...prevState,
+                {
+                  id: (prevState.length + 1).toString(),
+                  role: 'ai',
+                  message: result,
+                },
+              ])
+              break
+            }
+            result += new TextDecoder().decode(value)
+            setStreamText(result)
           }
-          result += new TextDecoder().decode(value)
-          setStreamText(
-            (prevData) => prevData + new TextDecoder().decode(value)
-          )
+        }
+        if (response.status === 404) {
+          localStorage.removeItem('session')
+          refreshSession()
+          setError('bot', {
+            message: 'Something went wrong, please try again',
+          })
+          return
         }
       } catch (error: any) {
         console.error(error)
+
         setError('bot', {
           message: error?.response?.data?.message ?? 'Something went wrong',
         })
