@@ -79,17 +79,25 @@ export default function ChatBotDemo() {
   ] = useQueries({
     queries: [
       {
-        queryKey: ['session', endPoint],
+        queryKey: ['session', endPoint, apiKey],
         queryFn: async () => {
-          const { data } = await axios.get(`/session`)
+          const { data } = await axios.get(`/session`, {
+            headers: {
+              'x-api-key': localStorage?.apiKey,
+            },
+          })
           return data
         },
         enabled: typeof window !== 'undefined' && !localStorage?.session,
       },
       {
-        queryKey: ['rule', endPoint],
+        queryKey: ['rule', endPoint, apiKey],
         queryFn: async () => {
-          const { data } = await axios.get(`/rule`)
+          const { data } = await axios.get(`/rule`, {
+            headers: {
+              'x-api-key': localStorage?.apiKey,
+            },
+          })
           return data
         },
       },
