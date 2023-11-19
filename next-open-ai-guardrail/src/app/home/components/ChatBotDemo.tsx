@@ -156,7 +156,7 @@ export default function ChatBotDemo() {
     }
     if (apiKey?.length !== 40) {
       setError('apiKey', {
-        message: 'There was an error fetching the response.',
+        message: 'API key invalid',
       })
     }
     localStorage.apiKey = apiKey
