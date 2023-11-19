@@ -64,9 +64,8 @@ export default function PlanHero() {
               Chatbot with Guardrail
             </h1>
             <p className='mt-6 text-lg leading-8 text-gray-600'>
-              API rate limits control the number of requests a user or app can
-              make to an API, preventing overuse and ensuring fair access.
-              Violating limits can lead to temporary access restrictions.
+              OpenAI, with Guardrail, enhances safety and ethics in AI by
+              providing oversight and compliance mechanisms.
             </p>
             <div className='mt-10 flex items-center justify-center gap-x-6'>
               <a
