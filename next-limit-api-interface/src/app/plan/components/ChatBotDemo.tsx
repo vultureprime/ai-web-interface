@@ -123,6 +123,12 @@ export default function ChatBotDemo() {
           })
           return
         }
+        if (response.status === 429) {
+          setError('bot', {
+            message: 'Limit Exceeded',
+          })
+          return
+        }
       } catch (error: any) {
         console.error(error)
 
