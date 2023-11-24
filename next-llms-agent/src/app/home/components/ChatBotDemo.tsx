@@ -1,11 +1,9 @@
 import ChatWidget, { ChatProps } from '@@/app/components/ChatWidget'
 import FormProvider from '@@/app/components/hook-form/FormProvider'
-import RHFTextField from '@@/app/components/hook-form/RHFTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQueries } from '@tanstack/react-query'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 export const askScheme = z.object({
@@ -15,7 +13,6 @@ export const askScheme = z.object({
 })
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API
-const API_URL = process.env.NEXT_PUBLIC_API
 
 export interface IOpenAIForm extends z.infer<typeof askScheme> {}
 
@@ -63,15 +60,12 @@ export default function ChatBotDemo() {
     const getData = async () => {
       try {
         setValue('query', '')
-        const { body } = await fetch(
-          `/query?uuid=${localStorage?.session}&message=${message.query}`,
-          {
-            method: 'GET',
-            headers: {
-              Accept: 'text/event-stream',
-            },
-          }
-        )
+        const { body } = await fetch(`/query?question=${message.query}`, {
+          method: 'GET',
+          headers: {
+            Accept: 'text/event-stream',
+          },
+        })
 
         const reader = body!.getReader()
         let result = ''
