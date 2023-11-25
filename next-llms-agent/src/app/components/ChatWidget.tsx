@@ -12,13 +12,7 @@ export interface ChatProps {
   raw: string
 }
 
-export default function ChatWidget({
-  answer,
-  streamText,
-}: {
-  answer: ChatProps[]
-  streamText?: string
-}) {
+export default function ChatWidget({ answer }: { answer: ChatProps[] }) {
   const chatWindowRef = useRef<HTMLDivElement>(null)
   const {
     formState: { isSubmitting, errors },
@@ -29,7 +23,6 @@ export default function ChatWidget({
       <Header />
       <ChatWindow
         messages={answer}
-        streamText={streamText}
         isLoading={isSubmitting}
         error={errors?.bot?.message as string}
         chatWindowRef={chatWindowRef}

@@ -11,7 +11,7 @@ const ChatInput: FC<ChatInputProps> = ({ isLoading }) => {
       <div className='flex items-center justify-center bg-white max-w-screen-md w-full  px-8 py-4 rounded-full shadow-md'>
         <RHFTextField
           type='text'
-          placeholder='Ask a question...'
+          placeholder='What do you need ? ...'
           className='outline-none w-full border-none'
           name='query'
         />

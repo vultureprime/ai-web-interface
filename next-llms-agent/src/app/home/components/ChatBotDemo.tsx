@@ -1,7 +1,7 @@
 import ChatWidget, { ChatProps } from '@@/app/components/ChatWidget'
 import FormProvider from '@@/app/components/hook-form/FormProvider'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -43,12 +43,7 @@ export default function ChatBotDemo() {
       setValue('query', '')
       const { data: result } = await axios.post(
         `/query?question=${data.query}`,
-        undefined,
-        {
-          headers: {
-            Accept: 'text/event-stream',
-          },
-        }
+        undefined
       )
       setAnswer((prevState) => [
         ...prevState,
@@ -59,9 +54,10 @@ export default function ChatBotDemo() {
           raw: result.json.customer_need,
         },
       ])
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as AxiosError<{ detail: string }>
       setError('bot', {
-        message: error?.response?.data?.message ?? 'Something went wrong',
+        message: err?.response?.data?.detail ?? 'Something went wrong',
       })
     }
   }

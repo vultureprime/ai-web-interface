@@ -14,7 +14,6 @@ interface ChatWindowProps {
   isLoading?: boolean
   error?: string
   chatWindowRef: any | null
-  streamText?: string
 }
 
 export const ChatWindow: React.FC<ChatWindowProps> = ({
@@ -22,7 +21,6 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   isLoading,
   error,
   chatWindowRef,
-  streamText = '',
 }) => {
   useEffect(() => {
     if (
@@ -32,7 +30,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
     ) {
       chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight
     }
-  }, [streamText, messages.length, chatWindowRef])
+  }, [messages.length, chatWindowRef])
 
   return (
     <div
@@ -83,17 +81,6 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
           )}
         </div>
       ))}
-      {!!streamText && (
-        <div className='flex gap-x-8 w-full mx-auto'>
-          <div className='min-w-[48px] min-h-[48px]'>
-            <Image src='/img/robot.png' width={48} height={48} alt='robot' />
-          </div>
-          <div>
-            <p className='font-bold'>Ai</p>
-            <p>{streamText}</p>
-          </div>
-        </div>
-      )}
       {isLoading && (
         <div className='flex gap-x-8 w-full mx-auto'>
           <div className='min-w-[48px] min-h-[48px]'>
