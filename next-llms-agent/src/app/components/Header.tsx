@@ -6,7 +6,7 @@ const Header: React.FC = () => {
     <div className='w-full flex flex-col bg-white py-8 gap-5 px-5 border-b  border-b-slate-200'>
       <h1 className='text-center text-xl flex items-center gap-2'>
         <Icon icon='mingcute:chat-1-fill' width={48} color='#8E8FFA' />
-        Let&apos;s chat
+        LLMs Agent
       </h1>
     </div>
   )

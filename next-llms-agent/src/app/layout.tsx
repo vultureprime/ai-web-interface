@@ -5,9 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'API Rate Limits',
-  description:
-    'API rate limits control the number of requests a user or app can make to an API, preventing overuse and ensuring fair access.',
+  title: 'LLMs Agent',
+  description: 'LLMs Agent',
 }
 
 export default function RootLayout({

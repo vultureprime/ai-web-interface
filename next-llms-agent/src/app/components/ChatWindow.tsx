@@ -75,7 +75,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                 </div>
 
                 <div
-                  className='prose'
+                  className='prose whitespace-pre-line'
                   dangerouslySetInnerHTML={{ __html: item.message }}
                 />
               </div>

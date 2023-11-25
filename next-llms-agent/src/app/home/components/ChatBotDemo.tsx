@@ -60,7 +60,6 @@ export default function ChatBotDemo() {
         },
       ])
     } catch (error: any) {
-      console.error(error)
       setError('bot', {
         message: error?.response?.data?.message ?? 'Something went wrong',
       })
