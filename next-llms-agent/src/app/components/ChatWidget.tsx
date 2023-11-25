@@ -9,6 +9,7 @@ export interface ChatProps {
   role: Role
   message: string
   id: string
+  raw: string
 }
 
 export default function ChatWidget({
@@ -16,24 +17,24 @@ export default function ChatWidget({
   streamText,
 }: {
   answer: ChatProps[]
-  streamText: string
+  streamText?: string
 }) {
   const chatWindowRef = useRef<HTMLDivElement>(null)
   const {
-    formState: { isLoading, errors },
+    formState: { isSubmitting, errors },
   } = useFormContext()
 
   return (
-    <div className='h-[700px] flex flex-col w-full'>
+    <div className='h-full  flex flex-col w-full'>
       <Header />
       <ChatWindow
         messages={answer}
         streamText={streamText}
-        isLoading={isLoading}
+        isLoading={isSubmitting}
         error={errors?.bot?.message as string}
         chatWindowRef={chatWindowRef}
       />
-      <ChatInput isLoading={isLoading} />
+      <ChatInput isLoading={isSubmitting} />
     </div>
   )
 }

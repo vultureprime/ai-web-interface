@@ -6,6 +6,7 @@ interface Message {
   role: 'user' | 'ai'
   message: string
   id: string
+  raw: string
 }
 
 interface ChatWindowProps {
@@ -13,7 +14,7 @@ interface ChatWindowProps {
   isLoading?: boolean
   error?: string
   chatWindowRef: any | null
-  streamText: string
+  streamText?: string
 }
 
 export const ChatWindow: React.FC<ChatWindowProps> = ({
@@ -21,7 +22,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   isLoading,
   error,
   chatWindowRef,
-  streamText,
+  streamText = '',
 }) => {
   useEffect(() => {
     if (
@@ -70,9 +71,13 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                 <div className='flex justify-between mb-1 w-full '>
                   <p className='font-bold'>Ai</p>
                   <div />
-                  <CopyClipboard content={item.message} />
+                  <CopyClipboard content={item.raw} />
                 </div>
-                <p>{item.message}</p>
+
+                <div
+                  className='prose'
+                  dangerouslySetInnerHTML={{ __html: item.message }}
+                />
               </div>
             </div>
           )}
@@ -96,7 +101,14 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
           </div>
           <div>
             <p className='font-bold'>Ai</p>
-            <p>Hang on a second ...</p>
+
+            <div className='mt-4 flex space-x-2 items-center '>
+              <p>Hang on a second </p>
+              <span className='sr-only'>Loading...</span>
+              <div className='h-2 w-2 bg-blue-600 rounded-full animate-bounce [animation-delay:-0.3s]'></div>
+              <div className='h-2 w-2 bg-blue-600 rounded-full animate-bounce [animation-delay:-0.15s]'></div>
+              <div className='h-2 w-2 bg-blue-600 rounded-full animate-bounce'></div>
+            </div>
           </div>
         </div>
       )}
