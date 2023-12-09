@@ -21,10 +21,14 @@ const Header: React.FC<OptionChatProps> = ({ hasRag, handleChangeRag }) => {
     try {
       await axios.post('/resetChat', undefined)
       setIsError(false)
+      onAlert()
+      setTimeout(() => {
+        window.location.reload()
+      }, 500)
     } catch (error) {
       setIsError(true)
+      onAlert()
     }
-    onAlert()
   }
   return (
     <>

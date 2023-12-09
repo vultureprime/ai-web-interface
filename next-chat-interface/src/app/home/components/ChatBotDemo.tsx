@@ -33,7 +33,7 @@ export default function ChatBotDemo() {
   })
 
   const { handleSubmit, setError, setValue } = methods
-
+  console.log(answer)
   const onSubmit = async (data: IOpenAIForm) => {
     try {
       const id = answer.length
