@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { ChatWindow } from './ChatWindow'
-import Header from './Header'
+import Header, { OptionChatProps } from './Header'
 import ChatInput from './ChatInput'
 import { useFormContext } from 'react-hook-form'
 
@@ -12,7 +12,13 @@ export interface ChatProps {
   raw: string
 }
 
-export default function ChatWidget({ answer }: { answer: ChatProps[] }) {
+export default function ChatWidget({
+  answer,
+  option,
+}: {
+  answer: ChatProps[]
+  option: OptionChatProps
+}) {
   const chatWindowRef = useRef<HTMLDivElement>(null)
   const {
     formState: { isSubmitting, errors },
@@ -20,7 +26,7 @@ export default function ChatWidget({ answer }: { answer: ChatProps[] }) {
 
   return (
     <div className='h-full  flex flex-col w-full'>
-      <Header />
+      <Header {...option} />
       <ChatWindow
         messages={answer}
         isLoading={isSubmitting}
